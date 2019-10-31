@@ -1,0 +1,16 @@
+SHOW DATABASES;
+DROP DATABASE IF EXISTS dcurcaassign2db;
+CREATE DATABASE dcurcaassign2db;
+USE dcurcaassign2db;
+GRANT USAGE ON *.* TO 'ta'@'localhost';
+DROP USER 'ta'@'localhost';
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
+GRANT ALL PRIVILEGES ON dcurcaassign2db.*TO 'ta'@'localhost';
+FLUSH PRIVILEGES;
+SHOW TABLES;
+CREATE TABLE patient (OHIPNumber BIGINT(9) NOT NULL, Fname VARCHAR(20), Lname VARCHAR(20), PRIMARY KEY(OHIPNumber));
+CREATE TABLE doctor (LicenseNumber VARCHAR(4) NOT NULL, LicenseDate DATE, Lname VARCHAR(20), Fname VARCHAR(20), Specialty VARCHAR(30), PRIMARY KEY(LicenseNumber), HosCODE VARCHAR(3));
+CREATE TABLE hospital (HospitalCode VARCHAR(3) NOT NULL, HospitalName VARCHAR(20), NumberOfBeds INT, Province CHAR(2), City VARCHAR(20), CurrentHeadDoc VARCHAR(4), CHDDate DATE, FOREIGN KEY(CurrentHeadDoc) REFERENCES doctor(LicenseNumber) ON DELETE RESTRICT, PRIMARY KEY(HospitalCode));
+ALTER TABLE doctor ADD FOREIGN KEY(HosCODE) REFERENCES hospital(HospitalCode);
+CREATE TABLE assigned (OHIP BIGINT(9), FOREIGN KEY(OHIP) REFERENCES patient(OHIPNumber), DocLicense VARCHAR(4), FOREIGN KEY(DocLicense) REFERENCES doctor(LicenseNumber) ON DELETE CASCADE);
+SHOW TABLES;

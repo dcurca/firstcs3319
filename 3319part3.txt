@@ -1,0 +1,40 @@
+USE dcurcaassign2db;
+
+-- QUERY 1
+SELECT Lname FROM patient;
+
+-- QUERY 2
+SELECT DISTINCT(Lname) FROM patient;
+
+-- QUERY 3
+SELECT * FROM doctor ORDER BY Lname;
+
+-- QUERY 4
+SELECT HospitalName, HospitalCode FROM hospital WHERE NumberOfBeds > 1500;
+
+-- QUERY 5
+SELECT Lname, Fname FROM doctor WHERE (SELECT HosCODE=HospitalCode FROM hospital WHERE HospitalName = "St.Joseph");
+
+-- QUERY 6 
+SELECT Fname, Lname FROM patient WHERE Lname LIKE 'G%';
+
+-- QUERY 7
+SELECT patient.Fname, patient.Lname FROM ((patient INNER JOIN assigned ON OHIPNumber=OHIP) INNER JOIN doctor ON DocLicense=LicenseNumber) WHERE doctor.Lname = "Clooney";
+
+-- QUERY 8
+SELECT HospitalName, City, doctor.Lname FROM hospital INNER JOIN doctor ON HospitalCode=HosCODE WHERE CurrentHeadDoc=LicenseNumber;
+
+-- QUERY 9 
+SELECT SUM(NumberOfBeds) AS "Total Number of Beds" FROM hospital;
+
+-- QUERY 10 
+SELECT patient.Fname, doctor.Fname FROM (((patient INNER JOIN assigned ON OHIPNumber=OHIP) INNER JOIN hospital ON CurrentHeadDoc=DocLicense) INNER JOIN doctor ON DocLicense=LicenseNumber);
+
+-- QUERY 11
+SELECT doctor.Fname FROM doctor INNER JOIN hospital ON HosCODE=HospitalCode WHERE Specialty = "Surgeon" AND HospitalName = "Victoria";
+
+-- QUERY 12 
+SELECT doctor.Fname FROM doctor WHERE LicenseNumber NOT IN(SELECT DocLicense FROM assigned);
+
+-- QUERY 13
+SELECT doctor.Lname, doctor.Fname FROM doctor WHERE LicenseNumber IN(SELECT DocLicense FROM assigned GROUP BY DocLicense HAVING COUNT(OHIP) > 1);

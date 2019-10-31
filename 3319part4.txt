@@ -1,0 +1,22 @@
+USE dcurcaassign2db;
+
+SELECT * FROM doctor;
+SELECT * FROM patient;
+SELECT * FROM hospital;
+SELECT * FROM assigned;
+
+CREATE VIEW patientheaddoc AS SELECT patient.Fname AS patient_fname, patient.Lname AS patient_Lname, doctor.Lname AS doctor_Lname, hospital.HospitalName AS hospital_name FROM patient, doctor, assigned, hospital WHERE (doctor.LicenseNumber = assigned.DocLicense) AND (doctor.LicenseNumber = CurrentHeadDoc) AND (OHIP = OHIPNumber) AND (CHDDate > '1995-31-12');
+SELECT * FROM patientheaddoc;
+
+SELECT * FROM doctor;
+SELECT * FROM assigned;
+
+DELETE FROM doctor WHERE Lname = "Clooney";
+SELECT * FROM doctor;
+SELECT * FROM assigned;
+SELECT * FROM doctor;
+
+DELETE FROM doctor WHERE Specialty = "Surgeon";
+-- the rows where specialty is surgeon did not delete because this there is a foreign key constraint that does not allow us to delete this query of doctors this is because 
+-- since hospital and doctor have a partial and a total participation side there always must be a head for that hospital when we try to delete all surgeons there is a surgeon 
+-- that is a head of a hospital because of that we cannot delete all surgeons also every hospital MUST (total participation) have a head doctor so that is why we cannot delete all surgeons 
